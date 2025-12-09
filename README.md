@@ -1,104 +1,99 @@
-Autonomous Insurance FNOL Claims Processing Agent
+# 🚀 Autonomous Insurance FNOL Claims Processing Agent
 
-This project implements an Autonomous FNOL (First Notice of Loss) Claims Agent which:
+This project implements an Autonomous FNOL (First Notice of Loss) Claims Processing Agent capable of:
+- Extracting key fields from FNOL documents (PDF/TXT)
+- Detecting missing or inconsistent information
+- Classifying claims using business routing rules
+- Returning a structured JSON response
+It simulates automated insurance claim triaging used in real insurance back-office workflows.
 
-extracts key information from FNOL documents (PDF/TXT),
+# 📑 Table of Contents
 
-detects missing mandatory fields,
+- Features
+- Extracted Fields
+- Routing Rules
+- Installation
+- Usage
+- Example Output
+- Project Structure
+- Limitations
+- Future Improvements
+- Tech Stack
+- Author
 
-applies rule-based routing,
+# ✨ Features
 
-returns a structured JSON result.
+- PDF text extraction using pdfplumber
+- Regex field extraction
+- Detection of missing mandatory data
+- Rule-based routing engine
+- JSON formatted output
+- Command-line usage
+- Lightweight, dependency-minimal design
 
-This project was built as part of an assessment and demonstrates:
-PDF parsing, regex extraction, rule-based decision making, and automated JSON formatting.
+# 📦 Extracted Fields
+## Policy Information
+- policy number
+- policyholder
+- effective dates
 
-✨ Features
+## Incident Information
+- date
+- time
+- location
+- description
 
-✔ PDF ingestion using pdfplumber
-✔ Regex-based field extraction
-✔ Mandatory field validation
-✔ Rule-based routing engine
-✔ Clean JSON output
-✔ CLI usage
-✔ Lightweight Python project (no UI or heavy frameworks)
+## Parties
+- claimant
+- third parties
+- contact details
 
-⚙ FNOL Fields Extracted
-Policy Information
+## Asset
+- asset type
+- VIN / asset id
+- estimated damage
 
-Policy Number
+# 🤖 Routing Rules (Business Logic)
 
-Policyholder Name
+**Rule**	                                            **Route**
+Estimated damage < 25,000	                              Fast-track
+Missing mandatory fields	                              Manual Review
+Contains “fraud”, “staged”, “inconsistent”	            Investigation Flag
+Claim type = injury	                                    Specialist Queue
 
-Effective Dates
-
-Incident Information
-
-Date of Loss
-
-Time
-
-Location
-
-Description
-
-Involved Parties
-
-Claimant
-
-Third Parties
-
-Contact Details
-
-Asset Details
-
-Asset Type
-
-VIN / Asset ID
-
-Estimated Damage
-
-🧠 Routing Logic
-
-Routing follows the assessment specification:
-
-Rule	                                                 Route
-Estimated damage < 25,000	                             Fast-track
-Missing mandatory fields	                             Manual Review
-Contains keywords: “fraud”, “staged”, “inconsistent”	 Investigation Flag
-Claim type = injury	                                     Specialist Queue
-
-📦 Installation
+# ⚙ Installation
 
 git clone https://github.com/poojareddy30/fnol-claims-agent.git
 cd fnol-claims-agent
-
 python -m venv venv
-
-# Windows:
 venv\Scripts\activate
-
-# Mac/Linux:
-source venv/bin/activate
-
 pip install -r requirements.txt
 
-▶ Usage
+# ▶ Usage
+
+Run against any FNOL PDF/TXT document:
 python -m fnol_agent.main "ACORD-Automobile-Loss-Notice.pdf" --pretty
 
-
-Example output:
+# 📌 Example Output
 
 {
-  "extractedFields": {...},
-  "missingFields": ["effectiveDates","assetId","estimatedDamage"],
-  "recommendedRoute": "Manual review",
-  "reasoning": "Missing mandatory fields"
+   "extractedFields": {
+      "policyNumber": "CONTACT",
+      "incidentLocation": "STREET",
+      ...
+   },
+   "missingFields": [
+      "effectiveDates",
+      "assetId",
+      "estimatedDamage"
+   ],
+   "recommendedRoute": "Manual review",
+   "reasoning": "Missing mandatory fields"
 }
 
-📂 Project Structure
+# 📁 Project Structure
+
 fnol-claims-agent/
-│
 ├── fnol_agent/
 │   ├── extractor.py
 │   ├── routing.py
@@ -107,42 +102,35 @@ fnol-claims-agent/
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
-└── ACORD-Automobile-Loss-Notice-12.05.16.pdf   (sample)
+└── ACORD-Automobile-Loss-Notice.pdf
 
-🧰 Tech Stack
+# ⚠ Limitations
 
-Python
+- Sample provided ACORD file is a blank template, therefore missing fields are expected.
+- Regex accuracy depends on form structure.
+- No OCR (scanned PDFs not supported).
+- No UI (CLI tool only).
 
-pdfplumber
+# 🧠 Future Improvements
 
-regex
+- LLM-based field extraction
+- OCR integration (Tesseract)
+- Web service (FastAPI)
+- Storage layer (Mongo/Postgres)
+- Auto-flagging inconsistent values
+- Model-driven fraud detection
+- Web dashboard
 
-CLI
+# 🧰 Tech Stack
 
-🔍 Notes
+- Python
+- pdfplumber
+- regex
 
-The provided ACORD sample is a blank FNOL template, so fields will appear as None or placeholder text.
-This is expected and proves the missing field detection + routing logic works correctly.
+# 👩‍💻 Author
+Built by **Thipparthi Pooja**
+GitHub: https://github.com/poojareddy30
 
-If you run a filled FNOL document, the JSON output will contain real values and routing may change.
+# ⭐ If you like this project
 
-🚀 Improvements (Future Work)
-
-OCR for scanned FNOL forms
-
-FastAPI service wrapper
-
-DB storage (Mongo/Postgres)
-
-LLM extraction (instead of regex)
-
-RPA integration (UiPath / Automation)
-
-👩‍💻 Author
-
-Built by Pooja Reddy (@poojareddy30) as part of a technical project.
-
-⭐ If this project helped you
-
-Consider giving it a ⭐ star on GitHub:
-👉 https://github.com/poojareddy30/fnol-claims-agent
+Please ⭐ star the repo 😊
